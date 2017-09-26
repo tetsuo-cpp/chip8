@@ -21,7 +21,7 @@ Display::Display()
 {
 	if (SDL_Init(SDL_INIT_VIDEO))
 	{
-		throw std::runtime_error("display: Failed to intialise SDL.");
+		throw std::runtime_error("display: Failed to initialise SDL.");
 	}
 
 	mWindow = SDL_CreateWindow("Chip8 Emulator",
@@ -39,7 +39,6 @@ Display::Display()
 	if (!mRenderer)
 	{
 		SDL_DestroyWindow(mWindow);
-
 		throw std::runtime_error("display: Failed to create SDL renderer.");
 	}
 }
@@ -52,7 +51,9 @@ Display::~Display()
 
 void Display::Clear()
 {
-	std::fill(mPixels.begin(), mPixels.end(), false);
+	std::fill(mPixels.begin(),
+	          mPixels.end(),
+	          false);
 }
 
 bool Display::DrawSprite(uint16_t x,
@@ -60,24 +61,19 @@ bool Display::DrawSprite(uint16_t x,
                          const std::vector<uint8_t>& sprite)
 {
 	std::cout << "display: Drawing sprite at: (" << x  << ", " << y << ")." << std::endl;
-
 	bool flipped = false;
 	for (size_t i = 0; i < sprite.size(); ++i)
 	{
 		uint8_t row = sprite[i];
 		for (size_t j = 0; j < SPRITE_WIDTH; ++j)
 		{
-			if (mPixels[ToIndex(x + i, y + j)])
+			bool leftmostBit = row & 0x80 >> j;
+			if (mPixels[ToIndex(x + j, y + i)] && !leftmostBit)
 			{
-				if (!(row & 0x01))
-				{
-					flipped = true;
-				}
+				flipped = true;
 			}
 
-			mPixels[ToIndex(x + i, y + j)] = row & 0x01;
-
-			row = row >> 1;
+			mPixels[ToIndex(x + j, y + i)] = leftmostBit;
 		}
 	}
 
@@ -120,8 +116,8 @@ size_t Display::ToIndex(uint16_t x, uint16_t y) const
 
 std::pair<size_t, size_t> Display::FromIndex(size_t index) const
 {
-	size_t x = index / DISPLAY_WIDTH;
-	size_t y = index % DISPLAY_WIDTH;
+	size_t x = index % DISPLAY_WIDTH;
+	size_t y = index / DISPLAY_WIDTH;
 
 	return std::make_pair(x, y);
 }

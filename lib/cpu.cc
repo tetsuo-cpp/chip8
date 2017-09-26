@@ -56,6 +56,7 @@ void Cpu::EmulateCycle()
 		{
 			mRom.SkipOp();
 		}
+
 		break;
 	}
 	case 0x4000:
@@ -64,6 +65,7 @@ void Cpu::EmulateCycle()
 		{
 			mRom.SkipOp();
 		}
+
 		break;
 	}
 	case 0x5000:
@@ -72,6 +74,7 @@ void Cpu::EmulateCycle()
 		{
 			mRom.SkipOp();
 		}
+
 		break;
 	}
 	case 0x6000:
@@ -110,7 +113,7 @@ void Cpu::EmulateCycle()
 		}
 		case 0x0004:
 		{
-			mV[0xF] = (mV[GetY(op)] > 0xFF - mV[GetX(op)]);
+			mV[0xF] = (mV[GetY(op)] > (0xFF - mV[GetX(op)]));
 			mV[GetX(op)] += mV[GetY(op)];
 			break;
 		}
@@ -134,7 +137,7 @@ void Cpu::EmulateCycle()
 		}
 		case 0x000E:
 		{
-			mV[0xF] = (mV[GetX(op)] & 0x8);
+			mV[0xF] = (mV[GetX(op)] & 0x80);
 			mV[GetX(op)] *= 2;
 			break;
 		}
@@ -150,6 +153,7 @@ void Cpu::EmulateCycle()
 		{
 			mRom.SkipOp();
 		}
+
 		break;
 	}
 	case 0xA000:
@@ -171,7 +175,9 @@ void Cpu::EmulateCycle()
 	{
 		std::vector<uint8_t> sprite(GetN(op));
 		mRom.Load(mI, sprite, GetN(op) - 1);
-		mV[0xF] = mDisplay.DrawSprite(GetX(op), GetY(op), sprite) ? 0x1 : 0x0;
+		mV[0xF] = mDisplay.DrawSprite(mV[GetX(op)],
+		                              mV[GetY(op)],
+		                              sprite) ? 0x1 : 0x0;
 		break;
 	}
 	case 0xE000:
@@ -225,13 +231,13 @@ void Cpu::EmulateCycle()
 		case 0x0055:
 		{
 			mRom.Dump(mI, mV, GetX(op));
-			mI += GetX(op);
+			mI += GetX(op) + 1;
 			break;
 		}
 		case 0x0065:
 		{
 			mRom.Load(mI, mV, GetX(op));
-			mI += GetX(op);
+			mI += GetX(op) + 1;
 			break;
 		}
 		default:
