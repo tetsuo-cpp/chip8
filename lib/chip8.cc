@@ -7,7 +7,7 @@
 namespace Chip8 {
 
 Chip8::Chip8()
-	: mCpu(mRom, mDisplay)
+	: mCpu(mRom, mDisplay, mController)
 {}
 
 void Chip8::Run()
@@ -19,18 +19,16 @@ void Chip8::Run()
 
 	SDL_Event e;
 
-	while (true)
+	try
 	{
-		if (SDL_PollEvent(&e))
+		while (true)
 		{
-			if (e.type == SDL_QUIT)
-			{
-				std::cout << "chip8: Detected quit." << std::endl;
-				return;
-			}
+			mCpu.EmulateCycle();
 		}
-
-		mCpu.EmulateCycle();
+	}
+	catch (const std::runtime_error& e)
+	{
+		std::cout << "chip8: Exiting..." << std::endl;
 	}
 }
 

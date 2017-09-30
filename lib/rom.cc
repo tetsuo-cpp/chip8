@@ -84,20 +84,17 @@ void Rom::SkipOp()
 
 void Rom::GoTo(uint16_t addr)
 {
-	std::cout << "rom: Jumping to: " << addr << "." << std::endl;
 	mAddr = addr;
 }
 
 void Rom::Call(uint16_t addr)
 {
-	std::cout << "rom: Calling subroutine at: " << addr << "." << std::endl;
 	mCalls.push(mAddr);
 	mAddr = addr;
 }
 
 void Rom::Return()
 {
-	std::cout << "rom: Returning from current subroutine." << std::endl;
 	assert(!mCalls.empty());
 
 	mAddr = mCalls.top();
@@ -108,7 +105,6 @@ void Rom::Dump(uint16_t addr,
                const std::vector<uint8_t>& reg,
                size_t index)
 {
-	std::cout << "rom: Dumping data at: " << addr << "." << std::endl;
 	assert((addr + index) < mMemory.size());
 	assert(index < reg.size());
 
@@ -121,7 +117,6 @@ void Rom::Load(uint16_t addr,
                std::vector<uint8_t>& reg,
                size_t index) const
 {
-	std::cout << "rom: Loading buffers at: " << addr << "." << std::endl;
 	assert((addr + index) < mMemory.size());
 	assert(index < reg.size());
 

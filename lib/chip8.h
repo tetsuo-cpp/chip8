@@ -1,5 +1,6 @@
 #pragma once
 
+#include "controller.h"
 #include "cpu.h"
 #include "display.h"
 #include "rom.h"
@@ -14,9 +15,10 @@ public:
 	void Run();
 
 private:
-	Rom     mRom;
-	Cpu     mCpu;
-	Display mDisplay;
+	Rom        mRom;
+	Display    mDisplay;
+	Controller mController;
+	Cpu        mCpu;
 };
 
 } // namespace Chip8

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "controller.h"
 #include "display.h"
 #include "rom.h"
 
@@ -8,7 +9,9 @@ namespace Chip8 {
 class Cpu
 {
 public:
-	Cpu(Rom& rom, Display& display);
+	Cpu(Rom& rom,
+	    Display& display,
+	    Controller& controller);
 
 	void EmulateCycle();
 
@@ -22,6 +25,7 @@ private:
 
 	Rom&                 mRom;
 	Display&             mDisplay;
+	Controller&          mController;
 	uint16_t             mI;
 	std::vector<uint8_t> mV;
 	uint8_t              mDelayTimer;

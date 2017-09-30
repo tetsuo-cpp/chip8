@@ -1,6 +1,5 @@
 #include "display.h"
 
-#include <iostream>
 #include <tuple>
 
 namespace {
@@ -45,8 +44,9 @@ Display::Display()
 
 Display::~Display()
 {
-	SDL_DestroyWindow(mWindow);
 	SDL_DestroyRenderer(mRenderer);
+	SDL_DestroyWindow(mWindow);
+	SDL_Quit();
 }
 
 void Display::Clear()
@@ -60,7 +60,6 @@ bool Display::DrawSprite(uint16_t x,
                          uint16_t y,
                          const std::vector<uint8_t>& sprite)
 {
-	std::cout << "display: Drawing sprite at: (" << x  << ", " << y << ")." << std::endl;
 	bool flipped = false;
 	for (size_t i = 0; i < sprite.size(); ++i)
 	{
@@ -68,12 +67,15 @@ bool Display::DrawSprite(uint16_t x,
 		for (size_t j = 0; j < SPRITE_WIDTH; ++j)
 		{
 			bool leftmostBit = row & 0x80 >> j;
-			if (mPixels[ToIndex(x + j, y + i)] && !leftmostBit)
+			if (leftmostBit)
 			{
-				flipped = true;
-			}
+				if (mPixels[ToIndex(x + j, y + i)])
+				{
+					flipped = true;
+				}
 
-			mPixels[ToIndex(x + j, y + i)] = leftmostBit;
+				mPixels[ToIndex(x + j, y + i)] = !(mPixels[ToIndex(x + j, y + i)]);
+			}
 		}
 	}
 

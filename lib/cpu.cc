@@ -1,14 +1,18 @@
 #include "cpu.h"
 
 #include <cassert>
+#include <ctime>
 #include <iostream>
 #include <iterator>
 
 namespace Chip8 {
 
-Cpu::Cpu(Rom& rom, Display& display)
+Cpu::Cpu(Rom& rom,
+         Display& display,
+         Controller& controller)
 	: mRom(rom),
 	  mDisplay(display),
+	  mController(controller),
 	  mI(0x0),
 	  mV(16, 0x0),
 	  mDelayTimer(0x0)
@@ -17,7 +21,6 @@ Cpu::Cpu(Rom& rom, Display& display)
 void Cpu::EmulateCycle()
 {
 	uint16_t op = mRom.ReadOp();
-	std::cout << "cpu: Handling op: " << std::hex << op << "." << std::endl;
 	switch (op & 0xF000)
 	{
 	case 0x0000:
@@ -182,7 +185,30 @@ void Cpu::EmulateCycle()
 	}
 	case 0xE000:
 	{
-		// Skip next op based on keypress.
+		switch (op & 0x00FF)
+		{
+		case 0x009E:
+		{
+			if (mController.IsKeyPressed(mV[GetX(op)]))
+			{
+				mRom.SkipOp();
+			}
+
+			break;
+		}
+		case 0x00A1:
+		{
+			if (!mController.IsKeyPressed(mV[GetX(op)]))
+			{
+				mRom.SkipOp();
+			}
+
+			break;
+		}
+		default:
+			PrintError(op);
+			break;
+		}
 		break;
 	}
 	case 0xF000:
@@ -196,7 +222,7 @@ void Cpu::EmulateCycle()
 		}
 		case 0x000A:
 		{
-			// Wait for key press.
+			mV[GetX(op)] = mController.WaitForKey();
 			break;
 		}
 		case 0x0015:
@@ -221,11 +247,11 @@ void Cpu::EmulateCycle()
 		}
 		case 0x0033:
 		{
-			std::vector<uint8_t> mDecimal;
-			mDecimal.push_back(mV[GetX(op)] / 100);
-			mDecimal.push_back((mV[GetX(op)] / 10) % 10);
-			mDecimal.push_back((mV[GetX(op)] % 100) % 100);
-			mRom.Dump(mI, mDecimal, mDecimal.size() - 1);
+			std::vector<uint8_t> decimal;
+			decimal.push_back(mV[GetX(op)] / 100);
+			decimal.push_back((mV[GetX(op)] / 10) % 10);
+			decimal.push_back((mV[GetX(op)] % 100) % 100);
+			mRom.Dump(mI, decimal, decimal.size() - 1);
 			break;
 		}
 		case 0x0055:
@@ -257,6 +283,12 @@ void Cpu::EmulateCycle()
 	}
 
 	mDisplay.Render();
+
+	struct timespec time;
+	time.tv_sec  = 0;
+	time.tv_nsec = 2000000;
+
+	nanosleep(&time, NULL);
 }
 
 void Cpu::PrintError(uint16_t op) const
