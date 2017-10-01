@@ -33,26 +33,21 @@ static const std::vector<uint8_t> FONT_SET =
 
 namespace Chip8 {
 
-Rom::Rom()
+Rom::Rom(const std::string& path)
 	: mMemory(MAX_MEMORY_ADDR, 0x0),
 	  mAddr(ROM_ADDR)
-{}
-
-bool Rom::Init(const std::string& path)
 {
 	std::ifstream file(path, std::ios::binary);
 	if (!file.is_open())
 	{
-		std::cerr << "File could not be opened." << std::endl;
-		return false;
+		throw std::runtime_error("rom: File could not be opened.");
 	}
 
 	file.seekg(0, std::ios::end);
 	size_t fileSize = file.tellg();
 	if (fileSize > (MAX_MEMORY_ADDR - ROM_ADDR))
 	{
-		std::cerr << "File exceeds maximum ROM size." << std::endl;
-		return false;
+		throw std::runtime_error("rom: File exceeds maximum ROM size.");
 	}
 
 	file.seekg(0, std::ios::beg);
@@ -63,8 +58,6 @@ bool Rom::Init(const std::string& path)
 	std::copy(FONT_SET.begin(),
 	          FONT_SET.end(),
 	          mMemory.begin());
-
-	return true;
 }
 
 uint16_t Rom::ReadOp()
@@ -103,25 +96,25 @@ void Rom::Return()
 
 void Rom::Dump(uint16_t addr,
                const std::vector<uint8_t>& reg,
-               size_t index)
+               size_t length)
 {
-	assert((addr + index) < mMemory.size());
-	assert(index < reg.size());
+	assert((addr + length) <= mMemory.size());
+	assert(length <= reg.size());
 
 	std::copy(reg.begin(),
-	          reg.begin() + index,
+	          reg.begin() + length,
 	          mMemory.begin() + addr);
 }
 
 void Rom::Load(uint16_t addr,
                std::vector<uint8_t>& reg,
-               size_t index) const
+               size_t length) const
 {
-	assert((addr + index) < mMemory.size());
-	assert(index < reg.size());
+	assert((addr + length) <= mMemory.size());
+	assert(length <= reg.size());
 
 	std::copy(mMemory.begin() + addr,
-	          mMemory.begin() + addr + index,
+	          mMemory.begin() + addr + length,
 	          reg.begin());
 }
 

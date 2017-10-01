@@ -1,22 +1,22 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+#include "interfaces.h"
 
-#include <vector>
+#include <SDL2/SDL.h>
 
 namespace Chip8 {
 
-class Display
+class Display : public IDisplay
 {
 public:
 	Display();
-	virtual ~Display();
+	virtual ~Display() override;
 
-	void Clear();
+	void Clear() override;
 	bool DrawSprite(uint16_t x,
 	                uint16_t y,
-	                const std::vector<uint8_t>& sprite);
-	void Render() const;
+	                const std::vector<uint8_t>& sprite) override;
+	void Render() const override;
 
 private:
 	size_t ToIndex(uint16_t x, uint16_t y) const;

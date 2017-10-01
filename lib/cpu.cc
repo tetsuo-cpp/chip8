@@ -7,18 +7,20 @@
 
 namespace Chip8 {
 
-Cpu::Cpu(Rom& rom,
-         Display& display,
-         Controller& controller)
+Cpu::Cpu(IRom& rom,
+         IDisplay& display,
+         IController& controller,
+         IRandom& random)
 	: mRom(rom),
 	  mDisplay(display),
 	  mController(controller),
+	  mRandom(random),
 	  mI(0x0),
 	  mV(16, 0x0),
 	  mDelayTimer(0x0)
 {}
 
-void Cpu::EmulateCycle()
+void Cpu::Execute()
 {
 	uint16_t op = mRom.ReadOp();
 	switch (op & 0xF000)
@@ -171,13 +173,13 @@ void Cpu::EmulateCycle()
 	}
 	case 0xC000:
 	{
-		// Generate a random number.
+		mV[GetX(op)] = GetNN(op) & mRandom.Generate();
 		break;
 	}
 	case 0xD000:
 	{
 		std::vector<uint8_t> sprite(GetN(op));
-		mRom.Load(mI, sprite, GetN(op) - 1);
+		mRom.Load(mI, sprite, GetN(op));
 		mV[0xF] = mDisplay.DrawSprite(mV[GetX(op)],
 		                              mV[GetY(op)],
 		                              sprite) ? 0x1 : 0x0;
@@ -222,7 +224,7 @@ void Cpu::EmulateCycle()
 		}
 		case 0x000A:
 		{
-			mV[GetX(op)] = mController.WaitForKey();
+			mV[GetX(op)] = mController.WaitForKeyPress();
 			break;
 		}
 		case 0x0015:
@@ -256,13 +258,13 @@ void Cpu::EmulateCycle()
 		}
 		case 0x0055:
 		{
-			mRom.Dump(mI, mV, GetX(op));
+			mRom.Dump(mI, mV, GetX(op) + 1);
 			mI += GetX(op) + 1;
 			break;
 		}
 		case 0x0065:
 		{
-			mRom.Load(mI, mV, GetX(op));
+			mRom.Load(mI, mV, GetX(op) + 1);
 			mI += GetX(op) + 1;
 			break;
 		}
@@ -288,7 +290,7 @@ void Cpu::EmulateCycle()
 	time.tv_sec  = 0;
 	time.tv_nsec = 2000000;
 
-	nanosleep(&time, NULL);
+	nanosleep(&time, nullptr);
 }
 
 void Cpu::PrintError(uint16_t op) const

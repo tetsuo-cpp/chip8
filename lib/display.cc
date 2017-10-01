@@ -1,5 +1,6 @@
 #include "display.h"
 
+#include <iostream>
 #include <tuple>
 
 namespace {
@@ -60,18 +61,19 @@ bool Display::DrawSprite(uint16_t x,
                          uint16_t y,
                          const std::vector<uint8_t>& sprite)
 {
-	bool flipped = false;
+	bool unset = false;
 	for (size_t i = 0; i < sprite.size(); ++i)
 	{
 		uint8_t row = sprite[i];
 		for (size_t j = 0; j < SPRITE_WIDTH; ++j)
 		{
-			bool leftmostBit = row & 0x80 >> j;
-			if (leftmostBit)
+			bool currentBit = row & 0x80 >> j;
+			if (currentBit)
 			{
+				// This means that we are unsetting a previously set pixel.
 				if (mPixels[ToIndex(x + j, y + i)])
 				{
-					flipped = true;
+					unset = true;
 				}
 
 				mPixels[ToIndex(x + j, y + i)] = !(mPixels[ToIndex(x + j, y + i)]);
@@ -79,7 +81,7 @@ bool Display::DrawSprite(uint16_t x,
 		}
 	}
 
-	return flipped;
+	return unset;
 }
 
 void Display::Render() const

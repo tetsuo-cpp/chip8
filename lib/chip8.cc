@@ -1,5 +1,11 @@
 #include "chip8.h"
 
+#include "cpu.h"
+#include "controller.h"
+#include "display.h"
+#include "random.h"
+#include "rom.h"
+
 #include <SDL2/SDL.h>
 
 #include <iostream>
@@ -7,28 +13,34 @@
 namespace Chip8 {
 
 Chip8::Chip8()
-	: mCpu(mRom, mDisplay, mController)
+	: mCpu(nullptr),
+	  mRom(nullptr),
+	  mDisplay(nullptr),
+	  mController(nullptr),
+	  mRandom(nullptr)
 {}
 
 void Chip8::Run()
 {
-	if (!mRom.Init("INVADERS"))
-	{
-		return;
-	}
-
-	SDL_Event e;
-
 	try
 	{
-		while (true)
-		{
-			mCpu.EmulateCycle();
-		}
+		mRom.reset(new Rom("INVADERS"));
+		mDisplay.reset(new Display());
+		mController.reset(new Controller());
+		mRandom.reset(new Random());
+		mCpu.reset(new Cpu(*mRom,
+		                   *mDisplay,
+		                   *mController,
+		                   *mRandom));
 	}
-	catch (const std::runtime_error& e)
+	catch (const std::runtime_error& err)
 	{
-		std::cout << "chip8: Exiting..." << std::endl;
+		std::cerr << err.what() << std::endl;
+	}
+
+	while (mController->ProcessEvents())
+	{
+		mCpu->Execute();
 	}
 }
 

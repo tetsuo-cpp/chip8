@@ -1,6 +1,7 @@
 #include "controller.h"
 
 #include <cassert>
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -35,7 +36,20 @@ Controller::Controller()
 	assert(SCANCODES.size() == 16);
 }
 
-uint8_t Controller::WaitForKey()
+bool Controller::ProcessEvents()
+{
+	while (SDL_PollEvent(&mEvent))
+	{
+		if (mEvent.type == SDL_QUIT)
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
+uint8_t Controller::WaitForKeyPress()
 {
 	// If we don't get a keypress we're interested in, just keep waiting.
 	while (true)
@@ -66,17 +80,8 @@ uint8_t Controller::WaitForKey()
 	}
 }
 
-bool Controller::IsKeyPressed(uint8_t key)
+bool Controller::IsKeyPressed(uint8_t key) const
 {
-	// Process all events that happened since the last keypress.
-	while (SDL_PollEvent(&mEvent))
-	{
-		if (mEvent.type == SDL_QUIT)
-		{
-			throw std::runtime_error("Captured exit event.");
-		}
-	}
-
 	const uint8_t* state = SDL_GetKeyboardState(nullptr);
 
 	return state[SCANCODES[key]];

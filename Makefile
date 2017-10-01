@@ -5,7 +5,7 @@ CPPFLAGS=-g $(shell root-config --cflags)
 LDFLAGS=-g $(shell root-config --ldflags) -lSDL2
 LDLIBS=-g $(shell root-config --libs)
 
-SRCS=src/main.cc lib/chip8.cc lib/cpu.cc lib/rom.cc lib/display.cc lib/controller.cc
+SRCS=src/main.cc lib/chip8.cc lib/cpu.cc lib/rom.cc lib/display.cc lib/controller.cc lib/random.cc
 OBJS=$(subst .cc,.o,$(SRCS))
 
 all: chip8
@@ -17,13 +17,15 @@ main.o: src/main.cc lib/chip8.h
 
 chip8.o: lib/chip8.h lib/chip8.cc lib/cpu.h lib/rom.h lib/display.h lib/controller.h
 
-cpu.o: lib/cpu.h lib/cpu.cc lib/rom.h lib/display.h lib/controller.h
+cpu.o: lib/cpu.h lib/cpu.cc lib/interfaces.h
 
-rom.o: lib/rom.h lib/rom.cc
+rom.o: lib/rom.h lib/rom.cc lib/interfaces.h
 
-display.o: lib/display.h lib/display.cc
+display.o: lib/display.h lib/display.cc lib/interfaces.h
 
-controller.o: lib/controller.h lib/controller.cc
+controller.o: lib/controller.h lib/controller.cc lib/interfaces.h
+
+random.o: lib/random.h lib/random.cc lib/interfaces.h
 
 clean:
 	$(RM) $(OBJS)

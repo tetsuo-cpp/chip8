@@ -1,29 +1,27 @@
 #pragma once
 
-#include <cstdint>
+#include "interfaces.h"
+
 #include <stack>
-#include <string>
-#include <vector>
 
 namespace Chip8 {
 
-class Rom
+class Rom : public IRom
 {
 public:
-	Rom();
+	Rom(const std::string& path);
 
-	bool Init(const std::string& path);
-	uint16_t ReadOp();
-	void SkipOp();
-	void GoTo(uint16_t addr);
-	void Call(uint16_t addr);
-	void Return();
+	uint16_t ReadOp() override;
+	void SkipOp() override;
+	void GoTo(uint16_t addr) override;
+	void Call(uint16_t addr) override;
+	void Return() override;
 	void Dump(uint16_t addr,
 	          const std::vector<uint8_t>& reg,
-	          size_t index);
+	          size_t length) override;
 	void Load(uint16_t addr,
 	          std::vector<uint8_t>& reg,
-	          size_t index) const;
+	          size_t length) const override;
 
 private:
 	std::vector<uint8_t> mMemory;

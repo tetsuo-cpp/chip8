@@ -1,9 +1,8 @@
 #pragma once
 
-#include "controller.h"
-#include "cpu.h"
-#include "display.h"
-#include "rom.h"
+#include "interfaces.h"
+
+#include <memory>
 
 namespace Chip8 {
 
@@ -15,10 +14,11 @@ public:
 	void Run();
 
 private:
-	Rom        mRom;
-	Display    mDisplay;
-	Controller mController;
-	Cpu        mCpu;
+	std::unique_ptr<ICpu>        mCpu;
+	std::unique_ptr<IRom>        mRom;
+	std::unique_ptr<IDisplay>    mDisplay;
+	std::unique_ptr<IController> mController;
+	std::unique_ptr<IRandom>     mRandom;
 };
 
 } // namespace Chip8
