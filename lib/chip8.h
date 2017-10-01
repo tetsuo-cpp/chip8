@@ -10,8 +10,9 @@ class Chip8
 {
 public:
 	Chip8();
+	~Chip8();
 
-	void Run();
+	void Run(const std::string& path);
 
 private:
 	std::unique_ptr<ICpu>        mCpu;

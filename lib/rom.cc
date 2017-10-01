@@ -47,6 +47,7 @@ Rom::Rom(const std::string& path)
 	size_t fileSize = file.tellg();
 	if (fileSize > (MAX_MEMORY_ADDR - ROM_ADDR))
 	{
+		file.close();
 		throw std::runtime_error("rom: File exceeds maximum ROM size.");
 	}
 

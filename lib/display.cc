@@ -19,11 +19,6 @@ Display::Display()
 	  mRenderer(nullptr),
 	  mPixels((DISPLAY_WIDTH * DISPLAY_HEIGHT), false)
 {
-	if (SDL_Init(SDL_INIT_VIDEO))
-	{
-		throw std::runtime_error("display: Failed to initialise SDL.");
-	}
-
 	mWindow = SDL_CreateWindow("Chip8 Emulator",
 	                           SDL_WINDOWPOS_CENTERED,
 	                           SDL_WINDOWPOS_CENTERED,
@@ -47,7 +42,6 @@ Display::~Display()
 {
 	SDL_DestroyRenderer(mRenderer);
 	SDL_DestroyWindow(mWindow);
-	SDL_Quit();
 }
 
 void Display::Clear()

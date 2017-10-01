@@ -58,6 +58,7 @@ class IRandom
 public:
 	virtual ~IRandom() {}
 
+	uint8_t operator()() { return Generate(); }
 	virtual uint8_t Generate() = 0;
 };
 

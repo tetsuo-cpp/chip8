@@ -18,13 +18,23 @@ Chip8::Chip8()
 	  mDisplay(nullptr),
 	  mController(nullptr),
 	  mRandom(nullptr)
-{}
+{
+	if (SDL_Init(SDL_INIT_VIDEO))
+	{
+		throw std::runtime_error("chip8: Failed to initialise SDL.");
+	}
+}
 
-void Chip8::Run()
+Chip8::~Chip8()
+{
+	SDL_Quit();
+}
+
+void Chip8::Run(const std::string& path)
 {
 	try
 	{
-		mRom.reset(new Rom("INVADERS"));
+		mRom.reset(new Rom(path));
 		mDisplay.reset(new Display());
 		mController.reset(new Controller());
 		mRandom.reset(new Random());
@@ -36,6 +46,7 @@ void Chip8::Run()
 	catch (const std::runtime_error& err)
 	{
 		std::cerr << err.what() << std::endl;
+		return;
 	}
 
 	while (mController->ProcessEvents())

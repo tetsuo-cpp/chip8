@@ -173,7 +173,7 @@ void Cpu::Execute()
 	}
 	case 0xC000:
 	{
-		mV[GetX(op)] = GetNN(op) & mRandom.Generate();
+		mV[GetX(op)] = GetNN(op) & mRandom();
 		break;
 	}
 	case 0xD000:
