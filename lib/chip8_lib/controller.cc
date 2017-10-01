@@ -32,12 +32,18 @@ static const std::vector<SDL_Scancode> SCANCODES =
 namespace Chip8 {
 
 Controller::Controller()
+	: mQuit(false)
 {
 	assert(SCANCODES.size() == 16);
 }
 
 bool Controller::ProcessEvents()
 {
+	if (mQuit)
+	{
+		return false;
+	}
+
 	while (SDL_PollEvent(&mEvent))
 	{
 		if (mEvent.type == SDL_QUIT)
@@ -56,9 +62,7 @@ uint8_t Controller::WaitForKeyPress()
 	{
 		SDL_WaitEvent(&mEvent);
 
-		switch (mEvent.type)
-		{
-		case SDL_KEYDOWN:
+		if (mEvent.type == SDL_KEYDOWN)
 		{
 			for (size_t i = 0; i < SCANCODES.size(); ++i)
 			{
@@ -67,15 +71,11 @@ uint8_t Controller::WaitForKeyPress()
 					return i;
 				}
 			}
-
-			break;
 		}
-		case SDL_QUIT:
+		else if (mEvent.type == SDL_QUIT)
 		{
-			throw std::runtime_error("Captured exit event.");
-		}
-		default:
-			break;
+			mQuit = true;
+			return 0x0;
 		}
 	}
 }

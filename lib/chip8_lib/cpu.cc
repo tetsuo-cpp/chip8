@@ -5,6 +5,35 @@
 #include <iostream>
 #include <iterator>
 
+namespace {
+
+uint16_t GetNNN(uint16_t op)
+{
+	return (op & 0x0FFF);
+}
+
+uint16_t GetNN(uint16_t op)
+{
+	return (op & 0x00FF);
+}
+
+uint16_t GetN(uint16_t op)
+{
+	return (op & 0x000F);
+}
+
+uint16_t GetX(uint16_t op)
+{
+	return (op & 0x0F00) >> 8;
+}
+
+uint16_t GetY(uint16_t op)
+{
+	return (op & 0x00F0) >> 4;
+}
+
+} // anonymous namespace
+
 namespace Chip8 {
 
 Cpu::Cpu(IRom& rom,
@@ -285,42 +314,11 @@ void Cpu::Execute()
 	}
 
 	mDisplay.Render();
-
-	struct timespec time;
-	time.tv_sec  = 0;
-	time.tv_nsec = 2000000;
-
-	nanosleep(&time, nullptr);
 }
 
 void Cpu::PrintError(uint16_t op) const
 {
 	std::cerr << "cpu: Unrecognised op: " << std::hex << op << std::endl;
-}
-
-uint16_t Cpu::GetNNN(uint16_t op) const
-{
-	return (op & 0x0FFF);
-}
-
-uint16_t Cpu::GetNN(uint16_t op) const
-{
-	return (op & 0x00FF);
-}
-
-uint16_t Cpu::GetN(uint16_t op) const
-{
-	return (op & 0x000F);
-}
-
-uint16_t Cpu::GetX(uint16_t op) const
-{
-	return (op & 0x0F00) >> 8;
-}
-
-uint16_t Cpu::GetY(uint16_t op) const
-{
-	return (op & 0x00F0) >> 4;
 }
 
 } // namespace Chip8

@@ -16,11 +16,6 @@ public:
 
 private:
 	void PrintError(uint16_t op) const;
-	uint16_t GetNNN(uint16_t op) const;
-	uint16_t GetNN(uint16_t op) const;
-	uint16_t GetN(uint16_t op) const;
-	uint16_t GetX(uint16_t op) const;
-	uint16_t GetY(uint16_t op) const;
 
 	IRom&                mRom;
 	IDisplay&            mDisplay;

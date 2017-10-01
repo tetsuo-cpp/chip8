@@ -1,14 +1,22 @@
 #include "chip8.h"
 
-#include "cpu.h"
 #include "controller.h"
+#include "cpu.h"
 #include "display.h"
 #include "random.h"
 #include "rom.h"
 
 #include <SDL2/SDL.h>
 
+#include <chrono>
 #include <iostream>
+#include <thread>
+
+namespace {
+
+static const size_t CLOCK_SPEED_US = 1852;
+
+} // anonymous namespace
 
 namespace Chip8 {
 
@@ -52,6 +60,8 @@ void Chip8::Run(const std::string& path)
 	while (mController->ProcessEvents())
 	{
 		mCpu->Execute();
+
+		std::this_thread::sleep_for(std::chrono::microseconds(CLOCK_SPEED_US));
 	}
 }
 
