@@ -12,7 +12,9 @@ SRCS= \
 	lib/chip8_lib/rom.cc \
 	lib/chip8_lib/display.cc \
 	lib/chip8_lib/controller.cc \
-	lib/chip8_lib/random.cc
+	lib/chip8_lib/random.cc \
+	lib/chip8_lib/clock.cc
+
 OBJS=$(subst .cc,.o,$(SRCS))
 
 all: chip8
@@ -30,7 +32,8 @@ chip8.o: \
 	chip8_lib/cpu.h \
 	chip8_lib/rom.h \
 	chip8_lib/display.h \
-	chip8_lib/controller.h
+	chip8_lib/controller.h \
+	chip8_lib/clock.h
 
 cpu.o: \
 	chip8_lib/cpu.h \
@@ -55,6 +58,11 @@ controller.o: \
 random.o: \
 	chip8_lib/random.h \
 	chip8_lib/random.cc \
+	chip8_lib/interfaces.h
+
+clock.o: \
+	chip8_lib/clock.h \
+	chip8_lib/clock.cc \
 	chip8_lib/interfaces.h
 
 clean:

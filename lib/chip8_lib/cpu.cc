@@ -39,11 +39,13 @@ namespace Chip8 {
 Cpu::Cpu(IRom& rom,
          IDisplay& display,
          IController& controller,
-         IRandom& random)
+         IRandom& random,
+         IClock& clock)
 	: mRom(rom),
 	  mDisplay(display),
 	  mController(controller),
 	  mRandom(random),
+	  mClock(clock),
 	  mI(0x0),
 	  mV(16, 0x0),
 	  mDelayTimer(0x0)
@@ -248,7 +250,7 @@ void Cpu::Execute()
 		{
 		case 0x0007:
 		{
-			mV[GetX(op)] = mDelayTimer;
+			mV[GetX(op)] = mClock.GetDelayTimer();
 			break;
 		}
 		case 0x000A:
@@ -258,7 +260,7 @@ void Cpu::Execute()
 		}
 		case 0x0015:
 		{
-			mDelayTimer = mV[GetX(op)];
+			mClock.SetDelayTimer(mV[GetX(op)]);
 			break;
 		}
 		case 0x0018:
@@ -307,13 +309,6 @@ void Cpu::Execute()
 		PrintError(op);
 		break;
 	}
-
-	if (mDelayTimer > 0)
-	{
-		--mDelayTimer;
-	}
-
-	mDisplay.Render();
 }
 
 void Cpu::PrintError(uint16_t op) const

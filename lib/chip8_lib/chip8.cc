@@ -1,5 +1,6 @@
 #include "chip8.h"
 
+#include "clock.h"
 #include "controller.h"
 #include "cpu.h"
 #include "display.h"
@@ -8,15 +9,7 @@
 
 #include <SDL2/SDL.h>
 
-#include <chrono>
 #include <iostream>
-#include <thread>
-
-namespace {
-
-static const size_t CLOCK_SPEED_US = 1852;
-
-} // anonymous namespace
 
 namespace Chip8 {
 
@@ -46,10 +39,12 @@ void Chip8::Run(const std::string& path)
 		mDisplay.reset(new Display());
 		mController.reset(new Controller());
 		mRandom.reset(new Random());
+		mClock.reset(new Clock());
 		mCpu.reset(new Cpu(*mRom,
 		                   *mDisplay,
 		                   *mController,
-		                   *mRandom));
+		                   *mRandom,
+		                   *mClock));
 	}
 	catch (const std::runtime_error& err)
 	{
@@ -60,8 +55,8 @@ void Chip8::Run(const std::string& path)
 	while (mController->ProcessEvents())
 	{
 		mCpu->Execute();
-
-		std::this_thread::sleep_for(std::chrono::microseconds(CLOCK_SPEED_US));
+		mDisplay->Render();
+		mClock->WaitForNextCycle();
 	}
 }
 

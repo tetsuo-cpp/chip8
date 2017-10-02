@@ -10,7 +10,8 @@ public:
 	Cpu(IRom& rom,
 	    IDisplay& display,
 	    IController& controller,
-		IRandom& random);
+	    IRandom& random,
+	    IClock& clock);
 
 	void Execute() override;
 
@@ -21,6 +22,7 @@ private:
 	IDisplay&            mDisplay;
 	IController&         mController;
 	IRandom&             mRandom;
+	IClock&              mClock;
 	uint16_t             mI;
 	std::vector<uint8_t> mV;
 	uint8_t              mDelayTimer;

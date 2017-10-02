@@ -62,4 +62,14 @@ public:
 	virtual uint8_t Generate() = 0;
 };
 
+class IClock
+{
+public:
+	virtual ~IClock() {}
+
+	virtual void WaitForNextCycle() = 0;
+	virtual uint8_t GetDelayTimer() const = 0;
+	virtual void SetDelayTimer(uint8_t timer) = 0;
+};
+
 } // namespace Chip8

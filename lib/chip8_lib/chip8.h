@@ -20,6 +20,7 @@ private:
 	std::unique_ptr<IDisplay>    mDisplay;
 	std::unique_ptr<IController> mController;
 	std::unique_ptr<IRandom>     mRandom;
+	std::unique_ptr<IClock>      mClock;
 };
 
 } // namespace Chip8
