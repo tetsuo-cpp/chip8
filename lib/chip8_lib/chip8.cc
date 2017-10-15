@@ -55,7 +55,6 @@ void Chip8::Run(const std::string& path)
 	while (mController->ProcessEvents())
 	{
 		mCpu->Execute();
-		mDisplay->Render();
 		mClock->WaitForNextCycle();
 	}
 }

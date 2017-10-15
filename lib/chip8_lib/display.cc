@@ -1,5 +1,6 @@
 #include "display.h"
 
+#include <cassert>
 #include <iostream>
 #include <tuple>
 
@@ -64,13 +65,19 @@ bool Display::DrawSprite(uint16_t x,
 			bool currentBit = row & 0x80 >> j;
 			if (currentBit)
 			{
-				// This means that we are unsetting a previously set pixel.
-				if (mPixels[ToIndex(x + j, y + i)])
+				if ((x + j >= DISPLAY_WIDTH) ||
+				    (y + i >= DISPLAY_HEIGHT))
+				{
+					continue;
+				}
+
+				size_t index = ToIndex(x + j, y + i);
+				if (mPixels[index])
 				{
 					unset = true;
 				}
 
-				mPixels[ToIndex(x + j, y + i)] = !(mPixels[ToIndex(x + j, y + i)]);
+				mPixels[index] = !mPixels[index];
 			}
 		}
 	}

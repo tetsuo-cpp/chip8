@@ -17,7 +17,7 @@ public:
 
 private:
 	SDL_Event mEvent;
-	bool mQuit;
+	bool      mQuit;
 };
 
 } // namespace Chip8

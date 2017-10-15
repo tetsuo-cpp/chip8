@@ -15,7 +15,7 @@ public:
 
 private:
 	uint8_t mDelayTimer;
-	size_t mTicks;
+	size_t  mTicks;
 };
 
 } // namespace Chip8

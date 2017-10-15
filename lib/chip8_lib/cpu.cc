@@ -63,6 +63,7 @@ void Cpu::Execute()
 		case 0x00E0:
 		{
 			mDisplay.Clear();
+			mDisplay.Render();
 			break;
 		}
 		case 0x00EE:
@@ -149,13 +150,13 @@ void Cpu::Execute()
 		}
 		case 0x0004:
 		{
-			mV[0xF] = (mV[GetY(op)] > (0xFF - mV[GetX(op)]));
+			mV[0xF] = (mV[GetY(op)] >= (0xFF - mV[GetX(op)]));
 			mV[GetX(op)] += mV[GetY(op)];
 			break;
 		}
 		case 0x0005:
 		{
-			mV[0xF] = (mV[GetY(op)] > mV[GetX(op)]);
+			mV[0xF] = (mV[GetX(op)] > mV[GetY(op)]);
 			mV[GetX(op)] -= mV[GetY(op)];
 			break;
 		}
@@ -167,7 +168,7 @@ void Cpu::Execute()
 		}
 		case 0x0007:
 		{
-			mV[0xF] = (mV[GetX(op)] > mV[GetY(op)]);
+			mV[0xF] = (mV[GetY(op)] >= mV[GetX(op)]);
 			mV[GetX(op)] = mV[GetY(op)] - mV[GetX(op)];
 			break;
 		}
@@ -213,7 +214,8 @@ void Cpu::Execute()
 		mRom.Load(mI, sprite, GetN(op));
 		mV[0xF] = mDisplay.DrawSprite(mV[GetX(op)],
 		                              mV[GetY(op)],
-		                              sprite) ? 0x1 : 0x0;
+		                              sprite);
+		mDisplay.Render();
 		break;
 	}
 	case 0xE000:
@@ -284,7 +286,7 @@ void Cpu::Execute()
 			decimal.push_back(mV[GetX(op)] / 100);
 			decimal.push_back((mV[GetX(op)] / 10) % 10);
 			decimal.push_back((mV[GetX(op)] % 100) % 100);
-			mRom.Dump(mI, decimal, decimal.size() - 1);
+			mRom.Dump(mI, decimal, decimal.size());
 			break;
 		}
 		case 0x0055:

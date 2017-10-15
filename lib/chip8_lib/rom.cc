@@ -83,6 +83,8 @@ void Rom::GoTo(uint16_t addr)
 
 void Rom::Call(uint16_t addr)
 {
+	assert(mCalls.size() < 16);
+
 	mCalls.push(mAddr);
 	mAddr = addr;
 }

@@ -12,10 +12,11 @@ public:
 	    IController& controller,
 	    IRandom& random,
 	    IClock& clock);
+	virtual ~Cpu() {}
 
 	void Execute() override;
 
-private:
+protected:
 	void PrintError(uint16_t op) const;
 
 	IRom&                mRom;
