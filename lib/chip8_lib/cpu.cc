@@ -162,8 +162,8 @@ void Cpu::Execute()
 		}
 		case 0x0006:
 		{
-			mV[0xF] = (mV[GetX(op)] & 0x1);
-			mV[GetX(op)] /= 2;
+			mV[0xF] = (mV[GetY(op)] & 0x1) ? 0x1 : 0x0;
+			mV[GetX(op)] = mV[GetY(op)] = mV[GetY(op)] >> 1;
 			break;
 		}
 		case 0x0007:
@@ -174,8 +174,8 @@ void Cpu::Execute()
 		}
 		case 0x000E:
 		{
-			mV[0xF] = (mV[GetX(op)] & 0x80);
-			mV[GetX(op)] *= 2;
+			mV[0xF] = (mV[GetY(op)] & 0x80) ? 0x1 : 0x0;
+			mV[GetX(op)] = mV[GetY(op)] = mV[GetY(op)] << 1;
 			break;
 		}
 		default:
@@ -277,7 +277,7 @@ void Cpu::Execute()
 		}
 		case 0x0029:
 		{
-			mI = mV[GetX(op)] * 0x5;
+			mI = mV[GetX(op)] * 5;
 			break;
 		}
 		case 0x0033:

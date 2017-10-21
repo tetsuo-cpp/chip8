@@ -18,7 +18,7 @@ public:
 		      controller,
 		      random,
 		      clock)
-		{}
+	{}
 
 	uint16_t& GetI() { return mI; }
 	std::vector<uint8_t>& GetV() { return mV; }
