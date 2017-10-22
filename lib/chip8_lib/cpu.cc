@@ -318,12 +318,16 @@ void Cpu::Execute()
 			mI = mV[GetX(op)] * 5;
 			break;
 		}
+		// FX33: Store the binary coded decimal representation of VX in memory at I.
+		// For example:
+		// VX = 0xFF = 255.
+		// memory[i] = 2, memory[i + 1] = 5 and memory[i + 2] = 5.
 		case 0x0033:
 		{
 			std::vector<uint8_t> decimal;
 			decimal.push_back(mV[GetX(op)] / 100);
 			decimal.push_back((mV[GetX(op)] / 10) % 10);
-			decimal.push_back((mV[GetX(op)] % 100) % 100);
+			decimal.push_back((mV[GetX(op)] % 100) % 10);
 			mRom.Dump(mI, decimal, decimal.size());
 			break;
 		}

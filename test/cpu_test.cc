@@ -630,6 +630,21 @@ TEST_F(CpuTest, GetIndexOfCharacter_0xFX29)
 	EXPECT_EQ(mCpu.GetI(), 15);
 }
 
+TEST_F(CpuTest, Decimal_0xFX33)
+{
+	auto& vBuffers = mCpu.GetV();
+	vBuffers[0x2] = 0xFF;
+
+	std::vector<uint8_t> decimal {2, 5, 5};
+
+	EXPECT_CALL(mRom, ReadOp())
+		.WillOnce(Return(0xF233));
+	EXPECT_CALL(mRom, Dump(_, decimal, decimal.size()))
+		.Times(1);
+
+	mCpu.Execute();
+}
+
 TEST_F(CpuTest, Dump_0xFX55)
 {
 	mCpu.GetI() = 5;
