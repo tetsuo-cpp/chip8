@@ -1,5 +1,7 @@
 # CHIP-8 Emulator
 This project is a unit tested C++ implementation of the CHIP-8 virtual machine.
+
+The emulator can be used to play game ROMs designed for the CHIP-8 system.
 ## Dependencies
 * SDL2
 * Google Test
