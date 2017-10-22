@@ -12,7 +12,7 @@ public:
 	Chip8();
 	~Chip8();
 
-	void Run(const std::string& path);
+	bool Run(const std::string& path);
 
 private:
 	std::unique_ptr<ICpu>        mCpu;

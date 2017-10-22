@@ -31,7 +31,7 @@ Chip8::~Chip8()
 	SDL_Quit();
 }
 
-void Chip8::Run(const std::string& path)
+bool Chip8::Run(const std::string& path)
 {
 	try
 	{
@@ -49,7 +49,7 @@ void Chip8::Run(const std::string& path)
 	catch (const std::runtime_error& err)
 	{
 		std::cerr << err.what() << std::endl;
-		return;
+		return false;
 	}
 
 	while (mController->ProcessEvents())
@@ -57,6 +57,8 @@ void Chip8::Run(const std::string& path)
 		mCpu->Execute();
 		mClock->WaitForNextCycle();
 	}
+
+	return true;
 }
 
 } // namespace Chip8

@@ -313,6 +313,8 @@ void Cpu::Execute()
 			break;
 		}
 		// FX29: Set I = address of character sprite in VX.
+		// These are copied to the start of memory on startup.
+		// Each character is 5 bytes long so we can just multiple the value by 5 to get the address.
 		case 0x0029:
 		{
 			mI = mV[GetX(op)] * 5;
