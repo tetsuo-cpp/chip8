@@ -448,11 +448,20 @@ TEST_F(CpuTest, DrawSprite_0xDXYN_NoCollision)
 	vBuffers[0x2] = 0x4;
 	vBuffers[0x3] = 0x6;
 
+	std::vector<uint8_t> sprite {0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1};
+	EXPECT_EQ(sprite.size(), 8u);
+
 	EXPECT_CALL(mRom, ReadOp())
 		.WillOnce(Return(0xD238));
 	EXPECT_CALL(mRom, Load(0x4444, _, 8))
-		.Times(1);
-	EXPECT_CALL(mDisplay, DrawSprite(0x4, 0x6, _))
+		.WillOnce(WithArgs<1>(
+			          Invoke([&sprite](std::vector<uint8_t>& buf)
+			                 {
+				                 // Populate the sprite buffer to simulate loading from a rom.
+				                 buf = sprite;
+			                 })
+			          ));
+	EXPECT_CALL(mDisplay, DrawSprite(0x4, 0x6, sprite))
 		.WillOnce(Return(0x0));
 	EXPECT_CALL(mDisplay, Render())
 		.Times(1);
@@ -470,11 +479,20 @@ TEST_F(CpuTest, DrawSprite_0xDXYN_Collision)
 	vBuffers[0x2] = 0x4;
 	vBuffers[0x3] = 0x6;
 
+	std::vector<uint8_t> sprite {0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1};
+	EXPECT_EQ(sprite.size(), 8u);
+
 	EXPECT_CALL(mRom, ReadOp())
 		.WillOnce(Return(0xD238));
 	EXPECT_CALL(mRom, Load(0x4444, _, 8))
-		.Times(1);
-	EXPECT_CALL(mDisplay, DrawSprite(0x4, 0x6, _))
+		.WillOnce(WithArgs<1>(
+			          Invoke([&sprite](std::vector<uint8_t>& buf)
+			                 {
+				                 // Populate the sprite buffer to simulate loading from a rom.
+				                 buf = sprite;
+			                 })
+			          ));
+	EXPECT_CALL(mDisplay, DrawSprite(0x4, 0x6, sprite))
 		.WillOnce(Return(0x1));
 	EXPECT_CALL(mDisplay, Render())
 		.Times(1);
