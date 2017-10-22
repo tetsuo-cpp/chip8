@@ -177,12 +177,13 @@ void Cpu::Execute()
 			mV[GetX(op)] -= mV[GetY(op)];
 			break;
 		}
-		// 8XY6: Set VX = VY = VY >> 1.
+		// 8XY6: Set VX = VX >> 1.
 		// Set VF to the least significant bit.
+		// The correct behaviour according to spec is to set VX = VY = VY >> 1, however some roms rely on the current implementation.
 		case 0x0006:
 		{
-			mV[0xF] = (mV[GetY(op)] & 0x1) ? 0x1 : 0x0;
-			mV[GetX(op)] = mV[GetY(op)] = mV[GetY(op)] >> 1;
+			mV[0xF] = (mV[GetX(op)] & 0x01) ? 0x1 : 0x0;
+			mV[GetX(op)] >>= 1;
 			break;
 		}
 		// 8XY7: Set VX = VY - VX.
@@ -193,12 +194,13 @@ void Cpu::Execute()
 			mV[GetX(op)] = mV[GetY(op)] - mV[GetX(op)];
 			break;
 		}
-		// 8XYE: Set VX = VY = VY >> 1.
+		// 8XYE: Set VX = VX << 1.
 		// Set VF to the most significant bit.
+		// The correct behaviour according to spec is to set VX = VY = VY << 1, however some roms rely on the current implementation.
 		case 0x000E:
 		{
-			mV[0xF] = (mV[GetY(op)] & 0x80) ? 0x1 : 0x0;
-			mV[GetX(op)] = mV[GetY(op)] = mV[GetY(op)] << 1;
+			mV[0xF] = (mV[GetX(op)] & 0x80) ? 0x1 : 0x0;
+			mV[GetX(op)] <<= 1;
 			break;
 		}
 		default:

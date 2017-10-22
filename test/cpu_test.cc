@@ -292,7 +292,7 @@ TEST_F(CpuTest, Subtraction_0x8XY5_Borrow)
 TEST_F(CpuTest, BitShiftRight_0x8XY6_Lsb0)
 {
 	auto& vBuffers = mCpu.GetV();
-	vBuffers[0x3] = 0xF0;
+	vBuffers[0x2] = 0xF0;
 
 	EXPECT_CALL(mRom, ReadOp())
 		.WillOnce(Return(0x8236));
@@ -300,14 +300,14 @@ TEST_F(CpuTest, BitShiftRight_0x8XY6_Lsb0)
 	mCpu.Execute();
 
 	EXPECT_EQ(vBuffers[0x2], 0x78);
-	EXPECT_EQ(vBuffers[0x3], 0x78);
+	EXPECT_EQ(vBuffers[0x3], 0x0);
 	EXPECT_EQ(vBuffers[0xF], 0x0);
 }
 
 TEST_F(CpuTest, BitShiftRight_0x8XY6_Lsb1)
 {
 	auto& vBuffers = mCpu.GetV();
-	vBuffers[0x3] = 0xF1;
+	vBuffers[0x2] = 0xF1;
 
 	EXPECT_CALL(mRom, ReadOp())
 		.WillOnce(Return(0x8236));
@@ -315,7 +315,7 @@ TEST_F(CpuTest, BitShiftRight_0x8XY6_Lsb1)
 	mCpu.Execute();
 
 	EXPECT_EQ(vBuffers[0x2], 0x78);
-	EXPECT_EQ(vBuffers[0x3], 0x78);
+	EXPECT_EQ(vBuffers[0x3], 0x0);
 	EXPECT_EQ(vBuffers[0xF], 0x1);
 }
 
@@ -354,7 +354,7 @@ TEST_F(CpuTest, Subtraction_0x8XY7_Borrow)
 TEST_F(CpuTest, BitShiftLeft_0x8XYE_Msb0)
 {
 	auto& vBuffers = mCpu.GetV();
-	vBuffers[0x3] = 0x11;
+	vBuffers[0x2] = 0x11;
 
 	EXPECT_CALL(mRom, ReadOp())
 		.WillOnce(Return(0x823E));
@@ -362,14 +362,14 @@ TEST_F(CpuTest, BitShiftLeft_0x8XYE_Msb0)
 	mCpu.Execute();
 
 	EXPECT_EQ(vBuffers[0x2], 0x22);
-	EXPECT_EQ(vBuffers[0x3], 0x22);
+	EXPECT_EQ(vBuffers[0x3], 0x0);
 	EXPECT_EQ(vBuffers[0xF], 0x0);
 }
 
 TEST_F(CpuTest, BitShiftLeft_0x8XYE_Msb1)
 {
 	auto& vBuffers = mCpu.GetV();
-	vBuffers[0x3] = 0x81;
+	vBuffers[0x2] = 0x81;
 
 	EXPECT_CALL(mRom, ReadOp())
 		.WillOnce(Return(0x823E));
@@ -377,7 +377,7 @@ TEST_F(CpuTest, BitShiftLeft_0x8XYE_Msb1)
 	mCpu.Execute();
 
 	EXPECT_EQ(vBuffers[0x2], 0x02);
-	EXPECT_EQ(vBuffers[0x3], 0x02);
+	EXPECT_EQ(vBuffers[0x3], 0x0);
 	EXPECT_EQ(vBuffers[0xF], 0x1);
 }
 
