@@ -107,4 +107,4 @@ gmock.a: gmock-all.o gtest-all.o
 	$(AR) $(ARFLAGS) $@ $^
 
 clean:
-	$(RM) $(OBJS) $(TEST_OBJS)
+	$(RM) chip8 chip8_test $(OBJS) $(TEST_OBJS)

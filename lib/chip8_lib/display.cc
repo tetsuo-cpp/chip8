@@ -20,7 +20,7 @@ Display::Display()
 	  mRenderer(nullptr),
 	  mPixels((DISPLAY_WIDTH * DISPLAY_HEIGHT), false)
 {
-	mWindow = SDL_CreateWindow("Chip8 Emulator",
+	mWindow = SDL_CreateWindow("CHIP-8 Emulator",
 	                           SDL_WINDOWPOS_CENTERED,
 	                           SDL_WINDOWPOS_CENTERED,
 	                           DISPLAY_WIDTH * PIXEL_SIZE,
