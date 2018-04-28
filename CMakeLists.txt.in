@@ -1,4 +1,4 @@
-# Setup GTest/Gmock.
+# Setup GTest/GMock.
 # This file is copied from the Google Test README.
 cmake_minimum_required(VERSION 2.8.2)
 
