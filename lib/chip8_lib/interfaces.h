@@ -8,7 +8,7 @@ namespace Chip8 {
 class ICpu
 {
 public:
-	virtual ~ICpu() {}
+	virtual ~ICpu() = default;
 
 	virtual void Execute() = 0;
 };
@@ -16,7 +16,7 @@ public:
 class IRom
 {
 public:
-	virtual ~IRom() {}
+	virtual ~IRom() = default;
 
 	virtual uint16_t ReadOp() = 0;
 	virtual void SkipOp() = 0;
@@ -34,7 +34,7 @@ public:
 class IDisplay
 {
 public:
-	virtual ~IDisplay() {}
+	virtual ~IDisplay() = default;
 
 	virtual void Clear() = 0;
 	virtual bool DrawSprite(uint16_t x,
@@ -46,7 +46,7 @@ public:
 class IController
 {
 public:
-	virtual ~IController() {}
+	virtual ~IController() = default;
 
 	virtual bool ProcessEvents() = 0;
 	virtual uint8_t WaitForKeyPress() = 0;
@@ -56,7 +56,7 @@ public:
 class IRandom
 {
 public:
-	virtual ~IRandom() {}
+	virtual ~IRandom() = default;
 
 	uint8_t operator()() { return Generate(); }
 
@@ -67,7 +67,7 @@ private:
 class IClock
 {
 public:
-	virtual ~IClock() {}
+	virtual ~IClock() = default;
 
 	virtual void WaitForNextCycle() = 0;
 	virtual uint8_t GetDelayTimer() const = 0;

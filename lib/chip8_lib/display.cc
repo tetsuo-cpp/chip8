@@ -6,10 +6,10 @@
 
 namespace {
 
-static const size_t DISPLAY_WIDTH  = 64;
-static const size_t DISPLAY_HEIGHT = 32;
-static const size_t SPRITE_WIDTH   = 8;
-static const size_t PIXEL_SIZE     = 10;
+const size_t DISPLAY_WIDTH  = 64;
+const size_t DISPLAY_HEIGHT = 32;
+const size_t SPRITE_WIDTH   = 8;
+const size_t PIXEL_SIZE     = 10;
 
 } // namespace anonymous
 

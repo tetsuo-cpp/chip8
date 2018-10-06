@@ -12,7 +12,7 @@ public:
 	    IController& controller,
 	    IRandom& random,
 	    IClock& clock);
-	virtual ~Cpu() {}
+	virtual ~Cpu() = default;
 
 	void Execute() override;
 

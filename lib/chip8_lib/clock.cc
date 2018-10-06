@@ -5,11 +5,11 @@
 
 namespace {
 
-static const size_t MICROS_IN_SECOND = 1000000;
-static const size_t CPU_HZ           = 540;
-static const size_t DELAY_HZ         = 60;
+const size_t MICROS_IN_SECOND = 1000000;
+const size_t CPU_HZ           = 540;
+const size_t DELAY_HZ         = 60;
 
-static constexpr size_t DELAY_TICKS = CPU_HZ / DELAY_HZ;
+const size_t DELAY_TICKS = CPU_HZ / DELAY_HZ;
 
 } // anonymous namespace
 

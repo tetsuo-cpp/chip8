@@ -1,42 +1,25 @@
 cmake_minimum_required(VERSION 3.9)
 project(chip8)
 
+# Compiler flags.
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+
 # Setup SDL2.
 find_package(SDL2 REQUIRED)
 include_directories(chip8 ${SDL2_INCLUDE_DIRS})
 
 # Setup GTest/GMock.
-# This section is copied from the Google Test README.
+add_subdirectory(
+  "${PROJECT_SOURCE_DIR}/external/googletest"
+  "external/googletest"
+  )
 
-# Download and unpack googletest at configure time
-configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
-execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "CMake step for googletest failed: ${result}")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} --build .
-  RESULT_VARIABLE result
-  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
-if(result)
-  message(FATAL_ERROR "Build step for googletest failed: ${result}")
-endif()
-
-# Prevent overriding the parent project's compiler/linker
-# settings on Windows
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-
-# Add googletest directly to our build. This defines
-# the gtest and gtest_main targets.
-add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
-                 ${CMAKE_BINARY_DIR}/googletest-build
-                 EXCLUDE_FROM_ALL)
-
-# Compiler flags.
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+set_target_properties(gtest PROPERTIES FOLDER extern)
+set_target_properties(gtest_main PROPERTIES FOLDER extern)
+set_target_properties(gmock PROPERTIES FOLDER extern)
+set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
 # Build emulator binary.
 set(

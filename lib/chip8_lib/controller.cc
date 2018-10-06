@@ -7,7 +7,7 @@
 
 namespace {
 
-static const std::vector<SDL_Scancode> SCANCODES =
+const std::vector<SDL_Scancode> SCANCODES =
 {
 	SDL_SCANCODE_1,
 	SDL_SCANCODE_2,

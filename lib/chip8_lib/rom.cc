@@ -6,10 +6,10 @@
 
 namespace {
 
-static const uint16_t MAX_MEMORY_ADDR = 4096;
-static const uint16_t ROM_ADDR        = 512;
+const uint16_t MAX_MEMORY_ADDR = 4096;
+const uint16_t ROM_ADDR        = 512;
 
-static const std::vector<uint8_t> FONT_SET =
+const std::vector<uint8_t> FONT_SET =
 {
 	0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
 	0x20, 0x60, 0x20, 0x20, 0x70, // 1
