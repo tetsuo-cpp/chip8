@@ -15,8 +15,11 @@ It can play game ROMs designed for the CHIP-8 system!
 ## Usage
 The emulator requires SDL2 which can be installed via your package manager.
 
-The unit tests require Google Test and Google Mock. Both of these frameworks recommend that you do not install and link against them as pre-compiled libraries. Therefore, this project's CMake setup will automatically clone the sources for these frameworks and compile them as part of the build.
+The unit tests require Google Test and Google Mock. Both of these frameworks recommend that you do not install and link against them as pre-compiled libraries. Therefore, these frameworks have been added as Git submodules and are compiled as part of the CMake build.
 ```
+git submodule init
+git submodule update
+cmake .
 cmake --build .
 ```
 ### Emulator
